@@ -202,6 +202,7 @@ ClientBin/
 *.publishsettings
 node_modules/
 orleans.codegen.cs
+*.db
 *.db-shm
 *.db-wal
 
