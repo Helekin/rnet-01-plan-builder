@@ -1,0 +1,174 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Activities
+meta:
+  id: wrk_f750e001faa34944b65a0bf1d89882a0
+  created: 1781113996668
+  modified: 1781113996668
+  description: ""
+collection:
+  - url: "{{ _.URL }}/api/activities"
+    name: Get activities
+    meta:
+      id: req_1573d7a30344410abac97355d74a6e6a
+      created: 1779043987645
+      modified: 1781122892869
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987645
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/activities/:id"
+    name: Get activity by ID
+    meta:
+      id: req_ff7251df4f0d47f6aff9b3c4257d1c2b
+      created: 1779044118456
+      modified: 1779044264101
+      isPrivate: false
+      description: ""
+      sortKey: -1779044118456
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: 163ec980-a9cf-47d0-8680-c4a9e87beacb
+  - url: "{{ _.URL }}/api/activities"
+    name: Create Activity
+    meta:
+      id: req_70cbc351c05346258ed20bd34a2d2ac0
+      created: 1781123730749
+      modified: 1781124249278
+      isPrivate: false
+      description: ""
+      sortKey: -1781123730749
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "{% faker 'randomPhrase' %}",
+        	"description": "{% faker 'randomWords' %}",
+        	"category": "Culture",
+        	"date": "{% faker 'randomDateFuture' %}",
+        	"city": "{% faker 'randomCity' %}",
+        	"venue": "{% faker 'randomStreetName' %}",
+        	"latitude": "{% faker 'randomLatitude' %}",
+        	"longitude": "{% faker 'randomLongitude' %}"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/activities"
+    name: Update Activity
+    meta:
+      id: req_23ec8bd6309949aaad75053ce5e1cdba
+      created: 1781124168414
+      modified: 1781124261367
+      isPrivate: false
+      description: ""
+      sortKey: -1780083924602.5
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"id": "7c130371-1ac3-4fb1-9604-837e2e03c016",
+        	"title": "Future Activity 11",
+        	"date": "2026-12-27T11:01:57.358",
+        	"description": "vero aequitas vulgaris",
+        	"category": "Culture",
+        	"isCancelled": false,
+        	"city": "East Jarrodfurt",
+        	"venue": "Jacinthe Views",
+        	"latitude": 0.9499,
+        	"longitude": -124.8794
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/activities/7c130371-1ac3-4fb1-9604-837e2e03c016"
+    name: Delete Activity
+    meta:
+      id: req_ea4e82789b9a45e0a6ae63b185befb75
+      created: 1781127226898
+      modified: 1781127268582
+      isPrivate: false
+      description: ""
+      sortKey: -1781127226898
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_94406f8fcf8a4b3fa15166cffb3c01cb
+    created: 1779043938427
+    modified: 1779043938427
+environments:
+  name: Base Environment
+  meta:
+    id: env_633089ef561e46649f3493d472a85237
+    created: 1779043938426
+    modified: 1779044248161
+    isPrivate: false
+  data:
+    URL: http://localhost:5001
