@@ -21,7 +21,9 @@ export default function ActivityDetail({
 }: Props) {
   const { activities } = useActivities();
 
-  const activity = activities?.find((x) => x.id === selectedActivity.id);
+  const activity = activities?.find(
+    (x: Activity) => x.id === selectedActivity.id,
+  );
 
   if (!activity) return <Typography>Loading...</Typography>;
 
