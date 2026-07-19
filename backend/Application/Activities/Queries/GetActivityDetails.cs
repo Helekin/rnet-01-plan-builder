@@ -1,7 +1,8 @@
-using Application.Core;
 using Domain;
 using MediatR;
+
 using Persistence;
+using Application.Core;
 
 namespace Application.Activities.Queries;
 

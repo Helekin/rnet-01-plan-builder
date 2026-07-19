@@ -3,8 +3,8 @@ using Domain;
 using MediatR;
 
 using Persistence;
-using Application.Activities.DTOs;
 using Application.Core;
+using Application.Activities.DTOs;
 
 namespace Application.Activities.Commands;
 
