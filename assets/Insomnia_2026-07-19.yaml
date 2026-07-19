@@ -2,17 +2,17 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: Activities
 meta:
-  id: wrk_f750e001faa34944b65a0bf1d89882a0
-  created: 1781113996668
-  modified: 1781113996668
+  id: wrk_611de24e05f64a7f9c276774d825de68
+  created: 1781143323418
+  modified: 1781143323418
   description: ""
 collection:
   - url: "{{ _.URL }}/api/activities"
-    name: Get activities
+    name: Get Activities
     meta:
-      id: req_1573d7a30344410abac97355d74a6e6a
+      id: req_9fe724bae2764643a93ca5eb5e7297b8
       created: 1779043987645
-      modified: 1781122892869
+      modified: 1784500267936
       isPrivate: false
       description: ""
       sortKey: -1779043987645
@@ -22,6 +22,11 @@ collection:
         value: insomnia/12.4.0
         description: ""
         disabled: false
+    authentication:
+      type: bearer
+      disabled: false
+      token: "{% response 'body', 'req_b82ff721791949e0adb40fbf42365d2e',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -31,11 +36,11 @@ collection:
         store: true
       rebuildPath: true
   - url: "{{ _.URL }}/api/activities/:id"
-    name: Get activity by ID
+    name: Get Activity by ID
     meta:
-      id: req_ff7251df4f0d47f6aff9b3c4257d1c2b
+      id: req_7d953cb0d9e542c0af00d223251b197f
       created: 1779044118456
-      modified: 1779044264101
+      modified: 1784500008417
       isPrivate: false
       description: ""
       sortKey: -1779044118456
@@ -45,6 +50,10 @@ collection:
         value: insomnia/12.4.0
         description: ""
         disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_b82ff721791949e0adb40fbf42365d2e',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -55,13 +64,13 @@ collection:
       rebuildPath: true
     pathParameters:
       - name: id
-        value: 163ec980-a9cf-47d0-8680-c4a9e87beacb
+        value: 02fcf26b-9426-4a94-93e8-564c28a14ec3
   - url: "{{ _.URL }}/api/activities"
     name: Create Activity
     meta:
-      id: req_70cbc351c05346258ed20bd34a2d2ac0
+      id: req_079d472a2b564e8e91b3e2fb0f8801fd
       created: 1781123730749
-      modified: 1781124249278
+      modified: 1784466583562
       isPrivate: false
       description: ""
       sortKey: -1781123730749
@@ -97,9 +106,9 @@ collection:
   - url: "{{ _.URL }}/api/activities"
     name: Update Activity
     meta:
-      id: req_23ec8bd6309949aaad75053ce5e1cdba
+      id: req_c64e828178364e4ba38f614ff18a6392
       created: 1781124168414
-      modified: 1781124261367
+      modified: 1784475406303
       isPrivate: false
       description: ""
       sortKey: -1780083924602.5
@@ -108,7 +117,7 @@ collection:
       mimeType: application/json
       text: |-
         {
-        	"id": "7c130371-1ac3-4fb1-9604-837e2e03c016",
+        	"id": "401c3703-9340-4d70-8151-38de8f9824ad",
         	"title": "Future Activity 11",
         	"date": "2026-12-27T11:01:57.358",
         	"description": "vero aequitas vulgaris",
@@ -137,7 +146,7 @@ collection:
   - url: "{{ _.URL }}/activities/7c130371-1ac3-4fb1-9604-837e2e03c016"
     name: Delete Activity
     meta:
-      id: req_ea4e82789b9a45e0a6ae63b185befb75
+      id: req_bc97330bf3904ee5baf824596f7eb21d
       created: 1781127226898
       modified: 1781127268582
       isPrivate: false
@@ -157,16 +166,48 @@ collection:
         send: true
         store: true
       rebuildPath: true
+  - url: "{{ _.URL }}/api/login"
+    name: Login User
+    meta:
+      id: req_b82ff721791949e0adb40fbf42365d2e
+      created: 1784498565765
+      modified: 1784498996260
+      isPrivate: false
+      description: ""
+      sortKey: -1784498565765
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "helekin@test.com",
+        	"password": "Kthulhu@1928"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_94406f8fcf8a4b3fa15166cffb3c01cb
+    id: jar_71d3dbadd991470986dc371ce9108131
     created: 1779043938427
     modified: 1779043938427
 environments:
   name: Base Environment
   meta:
-    id: env_633089ef561e46649f3493d472a85237
+    id: env_fd2e7865012d4364ba31f25b1bff4cbe
     created: 1779043938426
     modified: 1779044248161
     isPrivate: false
