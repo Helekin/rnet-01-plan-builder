@@ -4,6 +4,16 @@ This project corresponds to the backend of the Activities web platform, develope
 
 The system is designed to manage activities where users can register, browse, and participate in events. It handles user authentication, activity creation and management, attendee registration, and all the processes required to support a community-driven activities platform.
 
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Step-by-Step Guide](#step-by-step-guide)
+- [Database Setup (PostgreSQL on Linux)](#database-setup-postgresql-on-linux)
+- [Migrations and Database](#migrations-and-database)
+- [Important Notes](#important-notes)
+- [Useful Commands](#useful-commands)
+
 ## Project Structure
 
 The backend is organized following a Clean Architecture approach with separate layers to ensure high maintainability, testability, and scalability:
@@ -25,7 +35,7 @@ This separation facilitates maintenance, unit testing, and future integrations.
 dotnet --version
 ```
 
-4. A database engine (e.g., PostgreSQL or SQL Server, local or cloud-hosted such as Railway).
+4. **PostgreSQL** installed locally, or access to a cloud-hosted instance (e.g., Railway). See [Database Setup](#database-setup-postgresql-on-linux) below.
 5. Configure the required environment variables (connection string, JWT secrets, etc.).
 
 ## Step-by-Step Guide
@@ -114,14 +124,32 @@ cd ..
 
 > **Note:** `Domain` should not reference any other project. It must remain independent of frameworks and infrastructure concerns.
 
-### 6. Restore dependencies and build
+### 6. Add the PostgreSQL EF Core provider
+
+From the `Persistence` project (this is where `DbContext` and configurations live):
+
+```sh
+cd Persistence
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+cd ..
+```
+
+If the `API` project also needs the design-time tooling reference (for `dotnet ef` commands), add it there as well:
+
+```sh
+cd API
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL.Design
+cd ..
+```
+
+### 7. Restore dependencies and build
 
 ```sh
 dotnet restore
 dotnet build
 ```
 
-### 7. Run the application
+### 8. Run the application
 
 From the root folder, run the API project:
 
@@ -137,6 +165,116 @@ dotnet watch run
 ```
 
 The `watch` command will automatically reload the application when changes are detected.
+
+## Database Setup (PostgreSQL on Linux)
+
+These steps cover installing PostgreSQL and creating the local database on a Debian/Ubuntu-based distribution (e.g., Ubuntu, Linux Mint). If you're on a Fedora-based distro, replace `apt` with `dnf`.
+
+### 1. Install PostgreSQL
+
+```sh
+sudo apt update
+sudo apt install postgresql postgresql-contrib -y
+```
+
+Verify the installation:
+
+```sh
+psql --version
+```
+
+### 2. Start and enable the PostgreSQL service
+
+```sh
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+sudo systemctl status postgresql
+```
+
+### 3. Switch to the `postgres` system user
+
+PostgreSQL creates a default OS user called `postgres` with admin rights over the database server.
+
+```sh
+sudo -i -u postgres
+```
+
+### 4. Access the PostgreSQL prompt
+
+```sh
+psql
+```
+
+### 5. Create a database user (role) for the project
+
+Replace `backend_user` and `your_password` with your own values:
+
+```sql
+CREATE USER backend_user WITH PASSWORD 'your_password';
+```
+
+### 6. Create the database
+
+```sql
+CREATE DATABASE activities_db OWNER backend_user;
+```
+
+### 7. Grant privileges (if needed)
+
+```sql
+GRANT ALL PRIVILEGES ON DATABASE activities_db TO backend_user;
+```
+
+### 8. Exit psql and the postgres user session
+
+```sql
+\q
+```
+
+```sh
+exit
+```
+
+### 9. Test the connection with the new user
+
+```sh
+psql -h localhost -U backend_user -d activities_db
+```
+
+Enter `your_password` when prompted. If you get an authentication error, check `pg_hba.conf` (see note below).
+
+### 10. (Optional) Allow password authentication for local connections
+
+If step 9 fails with a `peer authentication failed` error, edit the PostgreSQL host-based authentication file:
+
+```sh
+sudo nano /etc/postgresql/*/main/pg_hba.conf
+```
+
+Change the `local` and `127.0.0.1` lines to use `md5` (or `scram-sha-256`) instead of `peer`/`ident`, then restart:
+
+```sh
+sudo systemctl restart postgresql
+```
+
+### 11. Set the connection string
+
+Add the connection string to `appsettings.Development.json` (excluded from version control), or store it via User Secrets:
+
+```sh
+dotnet user-secrets init -p API
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=activities_db;Username=backend_user;Password=your_password" -p API
+```
+
+Or directly in `appsettings.Development.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=activities_db;Username=backend_user;Password=your_password"
+  }
+}
+```
 
 ## Migrations and Database
 
@@ -192,7 +330,9 @@ It is recommended to manage sensitive configuration (connection strings, JWT sec
 - User Secrets for local sensitive data: `dotnet user-secrets init -p API`
 - Environment variables in production environments.
 
-### Useful Commands
+## Useful Commands
+
+### .NET
 
 | Command                          | Description                    |
 | -------------------------------- | ------------------------------ |
@@ -201,3 +341,18 @@ It is recommended to manage sensitive configuration (connection strings, JWT sec
 | `dotnet watch run --project API` | Runs with hot reload           |
 | `dotnet test`                    | Runs all tests in the solution |
 | `dotnet clean`                   | Removes build artifacts        |
+
+### PostgreSQL / psql
+
+| Command                               | Description                                            |
+| ------------------------------------- | ------------------------------------------------------ |
+| `sudo systemctl start postgresql`     | Starts the PostgreSQL service                          |
+| `sudo systemctl stop postgresql`      | Stops the PostgreSQL service                           |
+| `sudo systemctl status postgresql`    | Checks service status                                  |
+| `psql -h localhost -U <user> -d <db>` | Connects to a database                                 |
+| `\l`                                  | Lists all databases (inside psql)                      |
+| `\c <db_name>`                        | Connects to a specific database (inside psql)          |
+| `\dt`                                 | Lists all tables in the current database (inside psql) |
+| `\du`                                 | Lists all roles/users (inside psql)                    |
+| `\q`                                  | Exits the psql prompt                                  |
+| `DROP DATABASE activities_db;`        | Deletes the database (inside psql)                     |
