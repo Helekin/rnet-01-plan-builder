@@ -9,7 +9,9 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
+import "react-toastify/ReactToastify.css";
 import "./app/layout/styles.css";
+
 import { router } from "./app/router/Routes";
 import { store, StoreContext } from "./lib/stores/store";
 
