@@ -53,7 +53,7 @@ app.UseCors(x => x.AllowAnyHeader()
 .AllowAnyMethod()
 .AllowAnyOrigin()
 .AllowCredentials()
-.WithOrigins("http://localhost:5001"));
+.WithOrigins("http://localhost:5173"));
 
 app.UseAuthentication();
 app.UseAuthorization();
