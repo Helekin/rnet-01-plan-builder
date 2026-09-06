@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { CalendarToday, Info, Place } from "@mui/icons-material";
 
-import type { Activity } from "../../../lib/types";
+import { type Activity } from "../../../lib/types/index";
 import { formatDate } from "../../../lib/util/util";
 import MapComponent from "../../../app/shared/components/MapComponent";
 

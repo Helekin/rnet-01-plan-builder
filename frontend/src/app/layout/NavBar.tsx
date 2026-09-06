@@ -3,7 +3,6 @@ import { Observer } from "mobx-react-lite";
 import {
   AppBar,
   Box,
-  Button,
   Container,
   LinearProgress,
   Toolbar,
@@ -13,9 +12,11 @@ import { Group } from "@mui/icons-material";
 
 import MenuItemLink from "../shared/components/MenuItemLink";
 import { useStore } from "../../lib/hooks/useStore";
+import { useAccount } from "../../lib/hooks/useAccount";
 
 export default function NavBar() {
   const { uiStore } = useStore();
+  const { currentUser } = useAccount();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -48,7 +49,16 @@ export default function NavBar() {
               <MenuItemLink to="/create-activity">Create Activity</MenuItemLink>
             </Box>
 
-            <Button>User Menu</Button>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {currentUser ? (
+                <Typography>Welcome {currentUser.displayName}</Typography>
+              ) : (
+                <>
+                  <MenuItemLink to="/login">Login</MenuItemLink>
+                  <MenuItemLink to="/register">Register</MenuItemLink>
+                </>
+              )}
+            </Box>
           </Toolbar>
         </Container>
         <Observer>

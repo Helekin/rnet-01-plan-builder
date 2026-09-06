@@ -14,6 +14,13 @@ const agent = axios.create({ baseURL: import.meta.env.VITE_API_URL });
 
 agent.interceptors.request.use((config) => {
   store.uiStore.isBusy();
+
+  const token = store.userStore.token;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   return config;
 });
 

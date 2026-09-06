@@ -69,7 +69,10 @@ export default function LocationInput<T extends FieldValues>(props: Props<T>) {
     const city =
       location.address?.city ||
       location.address?.town ||
-      location.address?.village;
+      location.address?.village ||
+      location.address?.suburb ||
+      location.address?.neighbourhood ||
+      location.address?.state;
     const venue = location.display_name;
     const latitude = location.lat;
     const longitude = location.lon;

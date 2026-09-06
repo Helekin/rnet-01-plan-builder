@@ -58,7 +58,7 @@ export default function ActivityForm() {
         );
       } else {
         createActivity.mutate(flattenedData, {
-          onSuccess: (id) => navigate(`/activity/${id}`),
+          onSuccess: (id) => navigate(`/activities/${id}`),
         });
       }
     } catch (error) {
