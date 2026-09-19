@@ -34,7 +34,7 @@ agent.interceptors.response.use(
     await sleep(1000);
     store.uiStore.isIdle();
 
-    const { status } = error.response;
+    const status = error.response?.status;
 
     switch (status) {
       case 400:

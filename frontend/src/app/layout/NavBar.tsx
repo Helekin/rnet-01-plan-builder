@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { Observer } from "mobx-react-lite";
+import { observer } from "mobx-react-lite";
 import {
   AppBar,
   Box,
@@ -10,11 +10,13 @@ import {
 } from "@mui/material";
 import { Group } from "@mui/icons-material";
 
+import UserMenu from "./UserMenu";
+
 import MenuItemLink from "../shared/components/MenuItemLink";
 import { useStore } from "../../lib/hooks/useStore";
 import { useAccount } from "../../lib/hooks/useAccount";
 
-export default function NavBar() {
+function NavBar() {
   const { uiStore } = useStore();
   const { currentUser } = useAccount();
   return (
@@ -46,12 +48,11 @@ export default function NavBar() {
 
             <Box sx={{ display: "flex" }}>
               <MenuItemLink to="/activities">Activities</MenuItemLink>
-              <MenuItemLink to="/create-activity">Create Activity</MenuItemLink>
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {currentUser ? (
-                <Typography>Welcome {currentUser.displayName}</Typography>
+                <UserMenu />
               ) : (
                 <>
                   <MenuItemLink to="/login">Login</MenuItemLink>
@@ -61,23 +62,21 @@ export default function NavBar() {
             </Box>
           </Toolbar>
         </Container>
-        <Observer>
-          {() =>
-            uiStore.isLoading ? (
-              <LinearProgress
-                color="secondary"
-                sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: 4,
-                }}
-              />
-            ) : null
-          }
-        </Observer>
+        {uiStore.isLoading && (
+          <LinearProgress
+            color="secondary"
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 4,
+            }}
+          />
+        )}
       </AppBar>
     </Box>
   );
 }
+
+export default observer(NavBar);
