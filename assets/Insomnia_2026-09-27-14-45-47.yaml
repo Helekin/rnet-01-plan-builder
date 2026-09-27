@@ -2,15 +2,15 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: Activities
 meta:
-  id: wrk_611de24e05f64a7f9c276774d825de68
-  created: 1781143323418
-  modified: 1781143323418
+  id: wrk_91db53d3fc1646c4b026fb067180effb
+  created: 1784691409711
+  modified: 1784691409711
   description: ""
 collection:
   - url: "{{ _.URL }}/api/activities"
     name: Get Activities
     meta:
-      id: req_9fe724bae2764643a93ca5eb5e7297b8
+      id: req_1560b3d68afd457e9076651f4f5200e8
       created: 1779043987645
       modified: 1784500267936
       isPrivate: false
@@ -25,7 +25,7 @@ collection:
     authentication:
       type: bearer
       disabled: false
-      token: "{% response 'body', 'req_b82ff721791949e0adb40fbf42365d2e',
+      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
@@ -38,9 +38,9 @@ collection:
   - url: "{{ _.URL }}/api/activities/:id"
     name: Get Activity by ID
     meta:
-      id: req_7d953cb0d9e542c0af00d223251b197f
+      id: req_9980ba766cae4ba2ac5160dfd07e2ce7
       created: 1779044118456
-      modified: 1784500008417
+      modified: 1790529214315
       isPrivate: false
       description: ""
       sortKey: -1779044118456
@@ -52,7 +52,7 @@ collection:
         disabled: false
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_b82ff721791949e0adb40fbf42365d2e',
+      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
@@ -64,13 +64,13 @@ collection:
       rebuildPath: true
     pathParameters:
       - name: id
-        value: 02fcf26b-9426-4a94-93e8-564c28a14ec3
+        value: c93cce30-260c-47d9-9af4-1e49763e1805
   - url: "{{ _.URL }}/api/activities"
     name: Create Activity
     meta:
-      id: req_079d472a2b564e8e91b3e2fb0f8801fd
+      id: req_601374622b684fcf9b00124480715e60
       created: 1781123730749
-      modified: 1784466583562
+      modified: 1790529177764
       isPrivate: false
       description: ""
       sortKey: -1781123730749
@@ -95,6 +95,10 @@ collection:
         value: insomnia/12.6.0
         description: ""
         disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -106,7 +110,7 @@ collection:
   - url: "{{ _.URL }}/api/activities"
     name: Update Activity
     meta:
-      id: req_c64e828178364e4ba38f614ff18a6392
+      id: req_14030af00cca437d83c43aed8b079ce1
       created: 1781124168414
       modified: 1784475406303
       isPrivate: false
@@ -143,12 +147,12 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.URL }}/activities/7c130371-1ac3-4fb1-9604-837e2e03c016"
+  - url: "{{ _.URL }}/api/activities/:id"
     name: Delete Activity
     meta:
-      id: req_bc97330bf3904ee5baf824596f7eb21d
+      id: req_cae610c66e94403cb8266c8096357078
       created: 1781127226898
-      modified: 1781127268582
+      modified: 1788736674623
       isPrivate: false
       description: ""
       sortKey: -1781127226898
@@ -158,6 +162,11 @@ collection:
         value: insomnia/12.6.0
         description: ""
         disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+      prefix: ""
     settings:
       renderRequestBody: true
       encodeUrl: true
@@ -166,10 +175,13 @@ collection:
         send: true
         store: true
       rebuildPath: true
+    pathParameters:
+      - name: id
+        value: 69cd39d3-68d1-439a-9bef-84e96337f8e0
   - url: "{{ _.URL }}/api/login"
     name: Login User
     meta:
-      id: req_b82ff721791949e0adb40fbf42365d2e
+      id: req_8ed0412842714209ad377f0d1d1cd526
       created: 1784498565765
       modified: 1784498996260
       isPrivate: false
@@ -201,13 +213,13 @@ collection:
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_71d3dbadd991470986dc371ce9108131
+    id: jar_a24f40c2533a42728b4a2c400c5049e4
     created: 1779043938427
     modified: 1779043938427
 environments:
   name: Base Environment
   meta:
-    id: env_fd2e7865012d4364ba31f25b1bff4cbe
+    id: env_493d7386bbba4917b31bbf9bf037351e
     created: 1779043938426
     modified: 1779044248161
     isPrivate: false
