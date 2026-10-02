@@ -12,7 +12,7 @@ collection:
     meta:
       id: req_1560b3d68afd457e9076651f4f5200e8
       created: 1779043987645
-      modified: 1784500267936
+      modified: 1790915066110
       isPrivate: false
       description: ""
       sortKey: -1779043987645
@@ -40,7 +40,7 @@ collection:
     meta:
       id: req_9980ba766cae4ba2ac5160dfd07e2ce7
       created: 1779044118456
-      modified: 1790529214315
+      modified: 1790915214311
       isPrivate: false
       description: ""
       sortKey: -1779044118456
@@ -183,7 +183,7 @@ collection:
     meta:
       id: req_8ed0412842714209ad377f0d1d1cd526
       created: 1784498565765
-      modified: 1784498996260
+      modified: 1790915257644
       isPrivate: false
       description: ""
       sortKey: -1784498565765
@@ -192,7 +192,7 @@ collection:
       mimeType: application/json
       text: |-
         {
-        	"email": "helekin@test.com",
+        	"email": "saggi@test.com",
         	"password": "Kthulhu@1928"
         }
     headers:
@@ -210,6 +210,31 @@ collection:
         send: true
         store: true
       rebuildPath: true
+  - url: "{{ _.URL }}/api/activities/:id/attend"
+    name: Update Attendance
+    meta:
+      id: req_f3c1919a5dd6465b9114dfea99d8951c
+      created: 1790915031812
+      modified: 1790915210198
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987545
+    method: POST
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: c93cce30-260c-47d9-9af4-1e49763e1805
 cookieJar:
   name: Default Jar
   meta:
