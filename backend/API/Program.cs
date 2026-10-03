@@ -6,12 +6,12 @@ using FluentValidation;
 
 using Domain;
 using Persistence;
+using Infrastructure.Security;
 using API.Middleware;
 using Application.Core;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application;
-using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +47,18 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddAuthorization(
+    opt =>
+    {
+        opt.AddPolicy("IsActivityHost",
+        policy =>
+        {
+            policy.Requirements.Add(new IsHostRequirement());
+        }
+        );
+    }
+);
+builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
 var app = builder.Build();
 

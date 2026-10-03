@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Http;
-using Application;
-using Domain;
-using Persistence;
 using System.Security.Claims;
 
-namespace Infrastructure;
+using Application;
+using Persistence;
+using Domain;
+
+namespace Infrastructure.Security;
 
 public class UserAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext dbContext) : IUserAccessor
 {
