@@ -1,15 +1,16 @@
 import { Link } from "react-router";
-import type { Profile } from "../../lib/types";
 import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Chip,
-  Divider,
-  Typography,
+    Box,
+    Card,
+    CardContent,
+    CardMedia,
+    Chip,
+    Divider,
+    Typography,
 } from "@mui/material";
 import { Person } from "@mui/icons-material";
+
+import type { Profile } from "../../lib/types";
 
 type Props = {
   profile: Profile;
