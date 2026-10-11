@@ -16,7 +16,7 @@ export type Activity = {
   hostDisplayName: string;
 };
 
-type Profile = {
+export type Profile = {
   id: string;
   displayName: string;
   bio?: string;

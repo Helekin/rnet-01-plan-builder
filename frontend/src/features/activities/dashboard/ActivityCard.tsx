@@ -13,17 +13,20 @@ import {
 import { AccessTime, Place } from "@mui/icons-material";
 
 import { formatDate } from "../../../lib/util/util";
+import type { Activity } from "../../../lib/types";
 
 type Props = {
   activity: Activity;
 };
 
 export default function ActivityCard({ activity }: Props) {
-  const isHost = false;
-  const isGoing = false;
-  const label = isHost ? "You are hosting" : "You are going";
+  const label = activity.isHost ? "You are hosting" : "You are going";
   const isCancelled = false;
-  const color = isHost ? "secondary" : isGoing ? "warning" : "default";
+  const color = activity.isHost
+    ? "secondary"
+    : activity.isGoing
+      ? "warning"
+      : "default";
 
   return (
     <Card elevation={3} sx={{ borderRadius: 3 }}>
@@ -40,12 +43,15 @@ export default function ActivityCard({ activity }: Props) {
           sx={{ fontWeight: "bold", fontSize: 20 }}
           subheader={
             <>
-              Hosted by <Link to={`/profiles/bob`}>Bob</Link>
+              Hosted by{" "}
+              <Link to={`/profiles/${activity.hostId}`}>
+                {activity.hostDisplayName}
+              </Link>
             </>
           }
         />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mr: 2 }}>
-          {(isHost || isGoing) && (
+          {(activity.isHost || activity.isGoing) && (
             <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
           )}
           {isCancelled && (
@@ -73,7 +79,15 @@ export default function ActivityCard({ activity }: Props) {
             pl: 3,
           }}
         >
-          Attendees go gere
+          {activity.attendees.map((att) => (
+            <Avatar
+              key={att.id}
+              alt={att.displayName + " image"}
+              src={att.imageUrl}
+              component={Link}
+              to={`/profiles/${att.id}`}
+            />
+          ))}
         </Box>
       </CardContent>
       <CardContent sx={{ pb: 2 }}>
