@@ -14,6 +14,7 @@ import { AccessTime, Place } from "@mui/icons-material";
 
 import { formatDate } from "../../../lib/util/util";
 import type { Activity } from "../../../lib/types";
+import AvatarPopover from "../../../app/shared/components/AvatarPopover";
 
 type Props = {
   activity: Activity;
@@ -80,13 +81,7 @@ export default function ActivityCard({ activity }: Props) {
           }}
         >
           {activity.attendees.map((att) => (
-            <Avatar
-              key={att.id}
-              alt={att.displayName + " image"}
-              src={att.imageUrl}
-              component={Link}
-              to={`/profiles/${att.id}`}
-            />
+            <AvatarPopover profile={att} key={att.id} />
           ))}
         </Box>
       </CardContent>
