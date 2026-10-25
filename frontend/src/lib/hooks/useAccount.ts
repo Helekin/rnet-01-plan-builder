@@ -26,10 +26,14 @@ export const useAccount = () => {
       return response.data;
     },
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: ["user"],
-      });
       userStore.setToken(data.accessToken);
+      await queryClient.fetchQuery({
+        queryKey: ["user"],
+        queryFn: async () => {
+          const response = await agent.get<User>("/account/user-info");
+          return response.data;
+        },
+      });
     },
   });
 

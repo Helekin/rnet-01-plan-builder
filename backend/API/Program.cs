@@ -6,12 +6,14 @@ using FluentValidation;
 
 using Domain;
 using Persistence;
-using Infrastructure.Security;
+using Application;
 using API.Middleware;
 using Application.Core;
+using Infrastructure.Security;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
-using Application;
+using Infrastructure.Photos;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,7 @@ builder.Services.AddMediatR(x =>
     x.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfiles).Assembly));
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
@@ -59,6 +62,7 @@ builder.Services.AddAuthorization(
     }
 );
 builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 var app = builder.Build();
 
