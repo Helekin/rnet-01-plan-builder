@@ -2,17 +2,17 @@ type: collection.insomnia.rest/5.0
 schema_version: "5.1"
 name: Activities
 meta:
-  id: wrk_91db53d3fc1646c4b026fb067180effb
-  created: 1784691409711
-  modified: 1784691409711
+  id: wrk_4dfe6cec31df4d1db97012d7b7c2c8e8
+  created: 1791302620489
+  modified: 1791302620489
   description: ""
 collection:
   - url: "{{ _.URL }}/api/activities"
     name: Get Activities
     meta:
-      id: req_1560b3d68afd457e9076651f4f5200e8
+      id: req_e5a20e8ce8154f1a8cc6ac1b509cad55
       created: 1779043987645
-      modified: 1790915066110
+      modified: 1791303042032
       isPrivate: false
       description: ""
       sortKey: -1779043987645
@@ -25,7 +25,7 @@ collection:
     authentication:
       type: bearer
       disabled: false
-      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
@@ -38,7 +38,7 @@ collection:
   - url: "{{ _.URL }}/api/activities/:id"
     name: Get Activity by ID
     meta:
-      id: req_9980ba766cae4ba2ac5160dfd07e2ce7
+      id: req_69b7d3d1c34e4aa88f69e4290de58904
       created: 1779044118456
       modified: 1790915214311
       isPrivate: false
@@ -52,7 +52,7 @@ collection:
         disabled: false
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
@@ -68,7 +68,7 @@ collection:
   - url: "{{ _.URL }}/api/activities"
     name: Create Activity
     meta:
-      id: req_601374622b684fcf9b00124480715e60
+      id: req_021963c73c654feb9622dd3446f702ac
       created: 1781123730749
       modified: 1790529177764
       isPrivate: false
@@ -97,7 +97,7 @@ collection:
         disabled: false
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
@@ -110,7 +110,7 @@ collection:
   - url: "{{ _.URL }}/api/activities"
     name: Update Activity
     meta:
-      id: req_14030af00cca437d83c43aed8b079ce1
+      id: req_48712110a79b4ea18c42b0c97a18f6cc
       created: 1781124168414
       modified: 1784475406303
       isPrivate: false
@@ -150,7 +150,7 @@ collection:
   - url: "{{ _.URL }}/api/activities/:id"
     name: Delete Activity
     meta:
-      id: req_cae610c66e94403cb8266c8096357078
+      id: req_9a44679052804499bf4befbc38f9ffd1
       created: 1781127226898
       modified: 1788736674623
       isPrivate: false
@@ -164,7 +164,7 @@ collection:
         disabled: false
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
       prefix: ""
     settings:
@@ -181,7 +181,7 @@ collection:
   - url: "{{ _.URL }}/api/login"
     name: Login User
     meta:
-      id: req_8ed0412842714209ad377f0d1d1cd526
+      id: req_15d2aee2786c47b893b3aea7e09495f1
       created: 1784498565765
       modified: 1790915257644
       isPrivate: false
@@ -213,16 +213,16 @@ collection:
   - url: "{{ _.URL }}/api/activities/:id/attend"
     name: Update Attendance
     meta:
-      id: req_f3c1919a5dd6465b9114dfea99d8951c
+      id: req_087287e29ed74ef39f26c6a8b71817c4
       created: 1790915031812
-      modified: 1790915210198
+      modified: 1791302662748
       isPrivate: false
       description: ""
       sortKey: -1779043987545
     method: POST
     authentication:
       type: bearer
-      token: "{% response 'body', 'req_8ed0412842714209ad377f0d1d1cd526',
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
         'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
     settings:
       renderRequestBody: true
@@ -235,16 +235,97 @@ collection:
     pathParameters:
       - name: id
         value: c93cce30-260c-47d9-9af4-1e49763e1805
+  - url: "{{ _.URL }}/api/profiles/add-photo"
+    name: Add Profile Photo
+    meta:
+      id: req_c1a77af88ddd4855af4059c295266b5a
+      created: 1793042817685
+      modified: 1793045827142
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987495
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: File
+          value: ""
+          description: ""
+          disabled: false
+          fileName: /home/helekin/Downloads/profile.jpeg
+          type: file
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/account/user-info"
+    name: Get Current User
+    meta:
+      id: req_f35552dd8ac84fb9bca09b7318727ebe
+      created: 1793044640679
+      modified: 1793045864687
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987445
+    method: GET
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/profiles/:id/photos"
+    name: Get Profile Photo by User ID
+    meta:
+      id: req_9336f6cf13ba48bb92f8c75b1dd38fcd
+      created: 1793045714669
+      modified: 1793045942850
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987345
+    method: GET
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_15d2aee2786c47b893b3aea7e09495f1',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: 441b2032-9a86-46a1-8f0a-5cda87bff97c
 cookieJar:
   name: Default Jar
   meta:
-    id: jar_a24f40c2533a42728b4a2c400c5049e4
+    id: jar_291dbe3f0b3c4ba7b96fe664b0f84635
     created: 1779043938427
     modified: 1779043938427
 environments:
   name: Base Environment
   meta:
-    id: env_493d7386bbba4917b31bbf9bf037351e
+    id: env_56ec220c1e174087b689a241ae79c2c4
     created: 1779043938426
     modified: 1779044248161
     isPrivate: false
