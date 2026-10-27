@@ -53,5 +53,6 @@ public class MappingProfiles : Profile
                 s => s.User.Id
             )
         );
+        CreateMap<User, UserProfile>();
     }
 }

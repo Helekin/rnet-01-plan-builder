@@ -4,6 +4,7 @@ using MediatR;
 using Application.Core;
 using Persistence;
 using Domain;
+using Application.Interfaces;
 
 namespace Application.Activities.Commands;
 

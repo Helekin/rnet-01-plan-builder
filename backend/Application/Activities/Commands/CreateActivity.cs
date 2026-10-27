@@ -5,6 +5,7 @@ using MediatR;
 using Persistence;
 using Application.Core;
 using Application.Activities.DTOs;
+using Application.Interfaces;
 
 namespace Application.Activities.Commands;
 
