@@ -39,7 +39,13 @@ export default function ActivityCard({ activity }: Props) {
         }}
       >
         <CardHeader
-          avatar={<Avatar sx={{ height: 80, width: 80 }} />}
+          avatar={
+            <Avatar
+              src={activity.hostImageUrl}
+              sx={{ height: 80, width: 80 }}
+              alt="image of host"
+            />
+          }
           title={activity.title}
           sx={{ fontWeight: "bold", fontSize: 20 }}
           subheader={

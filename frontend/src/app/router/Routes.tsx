@@ -9,6 +9,7 @@ import NotFound from "../../features/errors/NotFound";
 import LoginForm from "../../features/account/LoginForm";
 import RegisterForm from "../../features/account/RegisterForm";
 import RequireAuth from "./RequireAuth";
+import ProfilePage from "../../features/profiles/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
           { path: "activities/:id", element: <ActivityDetailPage /> },
           { path: "create-activity", element: <ActivityForm key="create" /> },
           { path: "manage/:id", element: <ActivityForm /> },
+          { path: "profiles/:id", element: <ProfilePage /> },
         ],
       },
       { path: "not-found", element: <NotFound /> },
