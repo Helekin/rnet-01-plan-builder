@@ -1,9 +1,9 @@
 import { useParams } from "react-router";
 import { Grid, Typography } from "@mui/material";
 
-import { useProfile } from "../../lib/hooks/useProfile";
 import ProfileHeader from "./ProfileHeader";
 import ProfileContent from "./ProfileContent";
+import { useProfile } from "../../lib/hooks/useProfile";
 
 export default function ProfilePage() {
   const { id } = useParams();
