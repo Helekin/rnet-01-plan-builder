@@ -240,7 +240,7 @@ collection:
     meta:
       id: req_e78595e55ff04f458fd0aa0752e939da
       created: 1793042817685
-      modified: 1793084127628
+      modified: 1793445250527
       isPrivate: false
       description: ""
       sortKey: -1779043987495
@@ -252,7 +252,7 @@ collection:
           value: ""
           description: ""
           disabled: false
-          fileName: /home/helekin/Downloads/san_francisco.jpeg
+          fileName: /home/helekin/Pictures/Inti.png
           type: file
     headers:
       - name: Content-Type
@@ -346,10 +346,10 @@ collection:
     meta:
       id: req_0d92483846e949149e293d40adb01aff
       created: 1793085449646
-      modified: 1793085568898
+      modified: 1793669850062
       isPrivate: false
       description: ""
-      sortKey: -1779043987195
+      sortKey: -1779043987407.5
     method: PUT
     authentication:
       type: bearer
@@ -391,6 +391,38 @@ collection:
     pathParameters:
       - name: userId
         value: 6649094e-2e8a-4d30-bd82-9a23ad020b83
+  - url: "{{ _.URL }}/api/profiles/"
+    name: "Update Profile User "
+    meta:
+      id: req_cdd294b8756b48abb075c59ffd501bd1
+      created: 1793669597630
+      modified: 1793669744596
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987420
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"DisplayName": "Helekin",
+        	"Bio": "{% faker 'randomPhrase' %}"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_f0c538e8571840eab780a047f9a7499f',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
