@@ -3,7 +3,10 @@ import { z } from "zod";
 import { requiredString } from "../util/util";
 
 export const registerSchema = z.object({
-  email: z.email(),
+  email: z
+    .string()
+    .min(1)
+    .pipe(z.email({ error: "Please enter a valid email address" })),
   displayName: requiredString("displayName"),
   password: requiredString("password"),
 });

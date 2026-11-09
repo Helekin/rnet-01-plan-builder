@@ -36,6 +36,15 @@ export type User = {
   imageUrl?: string;
 };
 
+export type ChatComment = {
+  id: string;
+  createdAt: Date;
+  userId: string;
+  displayName: string;
+  imageUrl?: string;
+  body: string;
+};
+
 export type LocationIQSuggestion = {
   place_id: string;
   osm_id: string;

@@ -6,14 +6,15 @@ using FluentValidation;
 
 using Domain;
 using Persistence;
-using Application;
 using API.Middleware;
+using API.SignalR;
 using Application.Core;
 using Infrastructure.Security;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Infrastructure.Photos;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
+builder.Services.AddSignalR();
 builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
@@ -50,6 +52,22 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.Configure<BearerTokenOptions>(IdentityConstants.BearerScheme, opt =>
+opt.Events = new BearerTokenEvents
+{
+    OnMessageReceived = context =>
+    {
+        var accessToken = context.Request.Query["access_token"];
+        var path = context.HttpContext.Request.Path;
+
+        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/comments"))
+        {
+            context.Token = accessToken;
+        }
+
+        return Task.CompletedTask;
+    }
+});
 builder.Services.AddAuthorization(
     opt =>
     {
@@ -68,11 +86,11 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseCors(x => x.AllowAnyHeader()
+app.UseCors(x => x
+.AllowAnyHeader()
 .AllowAnyMethod()
-.AllowAnyOrigin()
 .AllowCredentials()
-.WithOrigins("http://localhost:5173"));
+.WithOrigins("http://localhost:5173", "https://localhost:5173"));
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -80,6 +98,7 @@ app.UseAuthorization();
 // Configure the HTTP request pipeline.
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<User>();
+app.MapHub<CommentHub>("/comments");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

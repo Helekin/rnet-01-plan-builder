@@ -19,6 +19,10 @@ export default function LoginForm() {
   } = useForm<LoginSchema>({
     mode: "onTouched",
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: LoginSchema) => {

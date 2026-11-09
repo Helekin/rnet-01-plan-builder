@@ -1,10 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 using Persistence;
 using Domain;
 using Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Security;
 
