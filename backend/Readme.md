@@ -1,269 +1,69 @@
 # Backend (.NET)
 
-This project corresponds to the backend of the Activities web platform, developed with `.NET` on `Linux/Windows/Mac` using Visual Studio Code.
-
-The system is designed to manage activities where users can register, browse, and participate in events. It handles user authentication, activity creation and management, attendee registration, and all the processes required to support a community-driven activities platform.
-
-## Table of Contents
-
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Step-by-Step Guide](#step-by-step-guide)
-- [Database Setup (PostgreSQL on Linux)](#database-setup-postgresql-on-linux)
-- [Migrations and Database](#migrations-and-database)
-- [Important Notes](#important-notes)
-- [Useful Commands](#useful-commands)
-
-## Project Structure
-
-The backend is organized following a Clean Architecture approach with separate layers to ensure high maintainability, testability, and scalability:
-
-- **API** → Web API controllers and application entry point. Exposes the REST endpoints and handles HTTP requests/responses.
-- **Application** → Business logic, use cases, DTOs, validators, and application-level services. Coordinates the flow between the API and the domain.
-- **Domain** → Entities, domain rules, and core business logic. The heart of the application, independent from any external concern.
-- **Persistence** → Data access layer, database context, repositories, configurations, and migrations.
-
-This separation facilitates maintenance, unit testing, and future integrations.
+REST API for the Activities platform, built with .NET 10 and PostgreSQL. For the architecture, database setup and migrations, see the [main README](../Readme.md).
 
 ## Prerequisites
 
-1. Have Visual Studio Code installed.
-2. Install the **C# Dev Kit** extension for IntelliSense, debugging, and project management.
-3. Have the **.NET SDK** installed. Verify with:
+- [.NET 10 SDK](https://dotnet.microsoft.com/download) (check with `dotnet --version`)
+- PostgreSQL running locally, with a database and user created (see [Database Setup](../Readme.md#database-setup-postgresql-on-linux))
+- A [Cloudinary](https://cloudinary.com/) account (for photo uploads)
+- (Optional) VS Code with the **C# Dev Kit** extension
 
-```sh
-dotnet --version
-```
+## How to Run
 
-### 6. Add the PostgreSQL EF Core provider
+All commands are run from the `backend/` folder.
 
-From the `Persistence` project (this is where `DbContext` and configurations live):
+### 1. Configure the settings
 
-```sh
-cd Persistence
-dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
-cd ..
-```
-
-If the `API` project also needs the design-time tooling reference (for `dotnet ef` commands), add it there as well:
-
-```sh
-cd API
-dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL.Design
-cd ..
-```
-
-### 7. Restore dependencies and build
-
-```sh
-dotnet restore
-dotnet build
-```
-
-### 8. Run the application
-
-From the root folder, run the API project:
-
-```sh
-dotnet run --project API
-```
-
-Or, alternatively, navigate into the API folder:
-
-```sh
-cd API
-dotnet watch run
-```
-
-The `watch` command will automatically reload the application when changes are detected.
-
-## Database Setup (PostgreSQL on Linux)
-
-These steps cover installing PostgreSQL and creating the local database on a Debian/Ubuntu-based distribution (e.g., Ubuntu, Linux Mint). If you're on a Fedora-based distro, replace `apt` with `dnf`.
-
-### 1. Install PostgreSQL
-
-```sh
-sudo apt update
-sudo apt install postgresql postgresql-contrib -y
-```
-
-Verify the installation:
-
-```sh
-psql --version
-```
-
-### 2. Start and enable the PostgreSQL service
-
-```sh
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-sudo systemctl status postgresql
-```
-
-### 3. Switch to the `postgres` system user
-
-PostgreSQL creates a default OS user called `postgres` with admin rights over the database server.
-
-```sh
-sudo -i -u postgres
-```
-
-### 4. Access the PostgreSQL prompt
-
-```sh
-psql
-```
-
-### 5. Create a database user (role) for the project
-
-Replace `backend_user` and `your_password` with your own values:
-
-```sql
-CREATE USER backend_user WITH PASSWORD 'your_password';
-```
-
-### 6. Create the database
-
-```sql
-CREATE DATABASE activities_db OWNER backend_user;
-```
-
-### 7. Grant privileges (if needed)
-
-```sql
-GRANT ALL PRIVILEGES ON DATABASE activities_db TO backend_user;
-```
-
-### 8. Exit psql and the postgres user session
-
-```sql
-\q
-```
-
-```sh
-exit
-```
-
-### 9. Test the connection with the new user
-
-```sh
-psql -h localhost -U backend_user -d activities_db
-```
-
-Enter `your_password` when prompted. If you get an authentication error, check `pg_hba.conf` (see note below).
-
-### 10. (Optional) Allow password authentication for local connections
-
-If step 9 fails with a `peer authentication failed` error, edit the PostgreSQL host-based authentication file:
-
-```sh
-sudo nano /etc/postgresql/*/main/pg_hba.conf
-```
-
-Change the `local` and `127.0.0.1` lines to use `md5` (or `scram-sha-256`) instead of `peer`/`ident`, then restart:
-
-```sh
-sudo systemctl restart postgresql
-```
-
-### 11. Set the connection string
-
-Add the connection string to `appsettings.Development.json` (excluded from version control), or store it via User Secrets:
+Set the database connection string with User Secrets:
 
 ```sh
 dotnet user-secrets init -p API
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=activities_db;Username=backend_user;Password=your_password" -p API
 ```
 
-Or directly in `appsettings.Development.json`:
+Create `API/appsettings.json` (git-ignored) with your Cloudinary credentials:
 
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=activities_db;Username=backend_user;Password=your_password"
-  }
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "CloudinarySettings": {
+    "CloudName": "your_cloud_name",
+    "ApiKey": "your_api_key",
+    "ApiSecret": "your_api_secret"
+  },
+  "AllowedHosts": "*"
 }
 ```
 
-## Migrations and Database
-
-Every time changes are made to the domain entities (for example, adding fields, relationships, or new tables), the following steps must be executed to update the database.
-
-### 1. Install Entity Framework Core tools (only the first time)
+### 2. Restore and build
 
 ```sh
-dotnet tool install --global dotnet-ef
+dotnet restore
+dotnet build
 ```
 
-### 2. Create a new migration
-
-From the root folder of the project (where the `.sln` file is located):
+### 3. Run the API
 
 ```sh
-dotnet ef migrations add MigrationName -p Persistence -s API
+dotnet run --project API
 ```
 
-### 3. Apply the migration to the database
+Or with hot reload:
 
 ```sh
-dotnet ef database update -p Persistence -s API
+dotnet watch run --project API
 ```
 
-### 4. Remove the last migration (if needed)
+The API starts at **http://localhost:5001**. Use `--launch-profile https` to serve it at `https://localhost:5001` instead. On startup it applies any pending migrations and seeds sample data automatically.
 
-```sh
-dotnet ef migrations remove -p Persistence -s API
-```
+> CORS only allows the frontend at `http://localhost:5173` / `https://localhost:5173`.
 
-## Important Notes
+### 4. Test the endpoints (optional)
 
-### Deployment on Railway
-
-When running migrations in a production environment, you need to connect to the Railway container or environment from the terminal.
-
-Before executing the database update command (`dotnet ef database update`), temporarily replace the local connection variables with Railway's external variables (for example, the production `ConnectionString`).
-
-This ensures that the migration is correctly applied to the cloud database.
-
-### Important
-
-Once the migration has been executed, restore the internal (local) variables in the `.env` file or in the project configurations.
-
-This prevents unnecessary connections to the production database and therefore avoids additional consumption or costs on Railway.
-
-### Environment Variables
-
-It is recommended to manage sensitive configuration (connection strings, JWT secrets, third-party API keys) through:
-
-- `appsettings.Development.json` for local development (excluded from version control).
-- User Secrets for local sensitive data: `dotnet user-secrets init -p API`
-- Environment variables in production environments.
-
-## Useful Commands
-
-### .NET
-
-| Command                          | Description                    |
-| -------------------------------- | ------------------------------ |
-| `dotnet build`                   | Compiles the entire solution   |
-| `dotnet run --project API`       | Runs the API project           |
-| `dotnet watch run --project API` | Runs with hot reload           |
-| `dotnet test`                    | Runs all tests in the solution |
-| `dotnet clean`                   | Removes build artifacts        |
-
-### PostgreSQL / psql
-
-| Command                               | Description                                            |
-| ------------------------------------- | ------------------------------------------------------ |
-| `sudo systemctl start postgresql`     | Starts the PostgreSQL service                          |
-| `sudo systemctl stop postgresql`      | Stops the PostgreSQL service                           |
-| `sudo systemctl status postgresql`    | Checks service status                                  |
-| `psql -h localhost -U <user> -d <db>` | Connects to a database                                 |
-| `\l`                                  | Lists all databases (inside psql)                      |
-| `\c <db_name>`                        | Connects to a specific database (inside psql)          |
-| `\dt`                                 | Lists all tables in the current database (inside psql) |
-| `\du`                                 | Lists all roles/users (inside psql)                    |
-| `\q`                                  | Exits the psql prompt                                  |
-| `DROP DATABASE activities_db;`        | Deletes the database (inside psql)                     |
+Import the Insomnia collection in [`../assets`](../assets) to try the API requests.
