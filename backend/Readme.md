@@ -1,4 +1,4 @@
-# Activities Backend (.NET)
+# Backend (.NET)
 
 This project corresponds to the backend of the Activities web platform, developed with `.NET` on `Linux/Windows/Mac` using Visual Studio Code.
 
@@ -34,95 +34,6 @@ This separation facilitates maintenance, unit testing, and future integrations.
 ```sh
 dotnet --version
 ```
-
-4. **PostgreSQL** installed locally, or access to a cloud-hosted instance (e.g., Railway). See [Database Setup](#database-setup-postgresql-on-linux) below.
-5. Configure the required environment variables (connection string, JWT secrets, etc.).
-
-## Step-by-Step Guide
-
-### 1. Create the project folder
-
-```sh
-mkdir backend
-cd backend
-```
-
-### 2. Create the main solution
-
-The solution (`.sln`) organizes the different projects under a single environment:
-
-```sh
-dotnet new sln
-```
-
-This will generate a `backend.sln` file.
-
-### 3. Create the projects
-
-#### API
-
-Entry point of the application (controllers and initial configuration):
-
-```sh
-dotnet new webapi -n API --controllers
-```
-
-#### Domain
-
-Contains the entities and core domain rules:
-
-```sh
-dotnet new classlib -n Domain
-```
-
-#### Application
-
-Contains the business logic, use cases, DTOs, and application services:
-
-```sh
-dotnet new classlib -n Application
-```
-
-#### Persistence
-
-Contains data access logic, the database context, repositories, and migrations:
-
-```sh
-dotnet new classlib -n Persistence
-```
-
-### 4. Add the projects to the solution
-
-```sh
-dotnet sln add API
-dotnet sln add Application
-dotnet sln add Domain
-dotnet sln add Persistence
-```
-
-### 5. Add references between projects
-
-The references should follow the dependency rule of Clean Architecture: outer layers depend on inner layers, never the other way around.
-
-```sh
-# From the API project
-cd API
-dotnet add reference ../Application
-dotnet add reference ../Persistence
-cd ..
-
-# From the Application project
-cd Application
-dotnet add reference ../Domain
-cd ..
-
-# From the Persistence project
-cd Persistence
-dotnet add reference ../Domain
-cd ..
-```
-
-> **Note:** `Domain` should not reference any other project. It must remain independent of frameworks and infrastructure concerns.
 
 ### 6. Add the PostgreSQL EF Core provider
 
