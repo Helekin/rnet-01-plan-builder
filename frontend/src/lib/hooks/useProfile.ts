@@ -137,6 +137,10 @@ export const useProfile = (id?: string, predicate?: string) => {
     },
     onSuccess: () => {
       queryClient.setQueryData(["profile", id], (profile: Profile) => {
+        queryClient.invalidateQueries({
+          queryKey: ["followings", id, "followers"],
+        });
+
         if (!profile || profile.followersCount === undefined) return profile;
 
         return {
