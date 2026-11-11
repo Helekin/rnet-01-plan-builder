@@ -274,7 +274,7 @@ collection:
     meta:
       id: req_982d6b69a9d34d6fbaec4ceb1c06315b
       created: 1793044640679
-      modified: 1793045864687
+      modified: 1794361860400
       isPrivate: false
       description: ""
       sortKey: -1779043987445
@@ -371,7 +371,7 @@ collection:
     meta:
       id: req_ff470850cce64fd6b78bd66ced09e91b
       created: 1793086469011
-      modified: 1793086516013
+      modified: 1794363147163
       isPrivate: false
       description: ""
       sortKey: -1779043987395
@@ -390,7 +390,7 @@ collection:
       rebuildPath: true
     pathParameters:
       - name: userId
-        value: 6649094e-2e8a-4d30-bd82-9a23ad020b83
+        value: saggi-id
   - url: "{{ _.URL }}/api/profiles/"
     name: "Update Profile User "
     meta:
@@ -423,6 +423,56 @@ collection:
         send: true
         store: true
       rebuildPath: true
+  - url: "{{ _.URL }}/api/profiles/saggi-id/follow"
+    name: Follow User
+    meta:
+      id: req_16476e7f8be94a318bfa0c8c156b92a5
+      created: 1794361988657
+      modified: 1794362113960
+      isPrivate: false
+      description: ""
+      sortKey: -1794361988657
+    method: POST
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_f0c538e8571840eab780a047f9a7499f',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/profiles/:userId/follow-list"
+    name: Get Followings
+    meta:
+      id: req_ca53dc54a0fc4f268bce30205a530098
+      created: 1794363237151
+      modified: 1794363598727
+      isPrivate: false
+      description: ""
+      sortKey: -1792264340828.5
+    method: GET
+    parameters:
+      - name: predicate
+        value: followings
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_f0c538e8571840eab780a047f9a7499f',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: userId
+        value: helekin-id
 cookieJar:
   name: Default Jar
   meta:
