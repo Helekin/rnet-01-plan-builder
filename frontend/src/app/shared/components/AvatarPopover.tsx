@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import Popover from "@mui/material/Popover";
 import { Avatar } from "@mui/material";
+import Popover from "@mui/material/Popover";
 
 import type { Profile } from "../../../lib/types";
 import ProfileCard from "../../../features/profiles/ProfileCard";
@@ -33,6 +33,10 @@ export default function AvatarPopover({ profile }: Props) {
         to={`/profiles/${profile.id}`}
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
+        sx={{
+          border: profile.following ? 3 : 0,
+          borderColor: "secondary.main",
+        }}
       />
       <Popover
         id="mouse-over-popover"

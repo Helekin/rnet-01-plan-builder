@@ -9,13 +9,15 @@ export default function ProfileAbout() {
   const { id } = useParams();
   const [editMode, setEditMode] = useState(false);
 
-  const { profile } = useProfile(id);
+  const { profile, isCurrentUser } = useProfile(id);
 
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h5">About {profile?.displayName}</Typography>
-        <Button onClick={() => setEditMode(!editMode)}>Edit profile</Button>
+        {isCurrentUser && (
+          <Button onClick={() => setEditMode(!editMode)}>Edit profile</Button>
+        )}
       </Box>
       <Divider sx={{ my: 2 }} />
       <Box sx={{ overflow: "auto", maxHeight: 350 }}>
