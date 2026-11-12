@@ -1,0 +1,511 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Activities
+meta:
+  id: wrk_4cad24af8b374af08eeb7530db1e3dd0
+  created: 1794410334567
+  modified: 1794410334567
+  description: ""
+collection:
+  - url: "{{ _.URL }}/api/activities"
+    name: Get Activities
+    meta:
+      id: req_bf45e6e39de04a7da4f3f197a7787f0b
+      created: 1779043987645
+      modified: 1794521294622
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987645
+    method: GET
+    parameters:
+      - name: filter
+        value: isHost
+      - name: startDate
+        value: "{{ _.activityDate }}"
+        description: ""
+        disabled: false
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      disabled: false
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    scripts:
+      preRequest: >-
+        const moment = require('moment');
+
+
+        insomnia.baseEnvironment.set("activityDate", moment().add(2,
+        "months").toISOString());
+      afterResponse: |-
+        const d = new Date();
+
+        d.setMonth(d.getMonth() + 2);
+
+        insomnia.baseEnvironment.set("activityDate", d.toISOString());
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/activities/:id"
+    name: Get Activity by ID
+    meta:
+      id: req_ca530d68e6ee4847a8e62f9de6a3ae15
+      created: 1779044118456
+      modified: 1790915214311
+      isPrivate: false
+      description: ""
+      sortKey: -1779044118456
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: c93cce30-260c-47d9-9af4-1e49763e1805
+  - url: "{{ _.URL }}/api/activities"
+    name: Create Activity
+    meta:
+      id: req_47d14def95c144bab7afe751ab46de3b
+      created: 1781123730749
+      modified: 1790529177764
+      isPrivate: false
+      description: ""
+      sortKey: -1781123730749
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "{% faker 'randomPhrase' %}",
+        	"description": "{% faker 'randomWords' %}",
+        	"category": "Culture",
+        	"date": "{% faker 'randomDateFuture' %}",
+        	"city": "{% faker 'randomCity' %}",
+        	"venue": "{% faker 'randomStreetName' %}",
+        	"latitude": "{% faker 'randomLatitude' %}",
+        	"longitude": "{% faker 'randomLongitude' %}"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/activities"
+    name: Update Activity
+    meta:
+      id: req_71654a0b26bb49d6b40c49829560c783
+      created: 1781124168414
+      modified: 1784475406303
+      isPrivate: false
+      description: ""
+      sortKey: -1780083924602.5
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"id": "401c3703-9340-4d70-8151-38de8f9824ad",
+        	"title": "Future Activity 11",
+        	"date": "2026-12-27T11:01:57.358",
+        	"description": "vero aequitas vulgaris",
+        	"category": "Culture",
+        	"isCancelled": false,
+        	"city": "East Jarrodfurt",
+        	"venue": "Jacinthe Views",
+        	"latitude": 0.9499,
+        	"longitude": -124.8794
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/activities/:id"
+    name: Delete Activity
+    meta:
+      id: req_d35d099bb4bf40b892bcc9e923d82455
+      created: 1781127226898
+      modified: 1788736674623
+      isPrivate: false
+      description: ""
+      sortKey: -1781127226898
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.6.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+      prefix: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: 69cd39d3-68d1-439a-9bef-84e96337f8e0
+  - url: "{{ _.URL }}/api/login"
+    name: Login User
+    meta:
+      id: req_d751c9f413964f408095dec2b60dde63
+      created: 1784498565765
+      modified: 1794492345937
+      isPrivate: false
+      description: ""
+      sortKey: -1784498565765
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "helekin@test.com",
+        	"password": "Kthulhu@1928"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/activities/:id/attend"
+    name: Update Attendance
+    meta:
+      id: req_afc5f8b484394c40b02676e63bc2540c
+      created: 1790915031812
+      modified: 1791302662748
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987545
+    method: POST
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: id
+        value: c93cce30-260c-47d9-9af4-1e49763e1805
+  - url: "{{ _.URL }}/api/profiles/add-photo"
+    name: Add Profile Photo
+    meta:
+      id: req_09c4977e253544cfa7e1bc4085906fc4
+      created: 1793042817685
+      modified: 1793445250527
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987495
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: File
+          value: ""
+          description: ""
+          disabled: false
+          fileName: /home/helekin/Pictures/Inti.png
+          type: file
+    headers:
+      - name: Content-Type
+        value: multipart/form-data
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/account/user-info"
+    name: Get Current User
+    meta:
+      id: req_c7176bb6057c45e08232fa2d1070d1da
+      created: 1793044640679
+      modified: 1794361860400
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987445
+    method: GET
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/profiles/:userId/photos"
+    name: Get Profile Photos by User ID
+    meta:
+      id: req_44fccf7f4dcc42d997c2cc863e6a83ba
+      created: 1793045714669
+      modified: 1793084235715
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987345
+    method: GET
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: userId
+        value: 6649094e-2e8a-4d30-bd82-9a23ad020b83
+  - url: "{{ _.URL }}/api/profiles/:photoId/photos"
+    name: Delete Profile Photo
+    meta:
+      id: req_00ab5492690f4dfeb0027c4498e70e3f
+      created: 1793083971817
+      modified: 1793084253777
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987245
+    method: DELETE
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: photoId
+        value: 0c5d4782-ceea-440a-81cd-a9ae9fbfdbd8
+  - url: "{{ _.URL }}/api/profiles/:photoId/setMain"
+    name: Set Main Profile Photo
+    meta:
+      id: req_99be6014d2c2422ca53ae0783a425acc
+      created: 1793085449646
+      modified: 1793669850062
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987407.5
+    method: PUT
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: photoId
+        value: fff26216-27fa-4d34-97a3-277a817e2cbc
+  - url: "{{ _.URL }}/api/profiles/:userId"
+    name: Get User Profile by ID
+    meta:
+      id: req_ce874b3a96644357b8a836f8742c14dd
+      created: 1793086469011
+      modified: 1794410364504
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987395
+    method: GET
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: userId
+        value: saggi-id
+  - url: "{{ _.URL }}/api/profiles/"
+    name: "Update Profile User "
+    meta:
+      id: req_7a7762c36dff4058adaeb4a87322d9b2
+      created: 1793669597630
+      modified: 1793669744596
+      isPrivate: false
+      description: ""
+      sortKey: -1779043987420
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"DisplayName": "Helekin",
+        	"Bio": "{% faker 'randomPhrase' %}"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/profiles/saggi-id/follow"
+    name: Follow User
+    meta:
+      id: req_7a1b7b5941444b8193aa32a3cd8b7b41
+      created: 1794361988657
+      modified: 1794362113960
+      isPrivate: false
+      description: ""
+      sortKey: -1794361988657
+    method: POST
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.URL }}/api/profiles/:userId/follow-list"
+    name: Get Followings
+    meta:
+      id: req_aa5a24d85bfd4254b76a546b5a5089b4
+      created: 1794363237151
+      modified: 1794363598727
+      isPrivate: false
+      description: ""
+      sortKey: -1792264340828.5
+    method: GET
+    parameters:
+      - name: predicate
+        value: followings
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_d751c9f413964f408095dec2b60dde63',
+        'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    pathParameters:
+      - name: userId
+        value: helekin-id
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_ae3d1cd380234463b3680f9313832b44
+    created: 1779043938427
+    modified: 1794521294984
+environments:
+  name: Base Environment
+  meta:
+    id: env_1c95d80ca84646e8b7da67024680c246
+    created: 1779043938426
+    modified: 1794521294985
+    isPrivate: false
+  data:
+    URL: http://localhost:5001
+    activityDate: 2027-01-12T22:08:14.982Z

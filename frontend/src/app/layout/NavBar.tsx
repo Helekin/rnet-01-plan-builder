@@ -22,11 +22,10 @@ function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           backgroundImage:
             "linear-gradient(135deg, #182A73 0%, #218AAE 69%, #20A7AE 89%)",
-          position: "relative",
         }}
       >
         <Container maxWidth="xl">
