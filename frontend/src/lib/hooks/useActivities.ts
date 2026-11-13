@@ -9,12 +9,16 @@ import {
 import type { PagedList, Activity } from "../types";
 import { useAccount } from "./useAccount";
 import agent from "../api/agent";
+import { useStore } from "./useStore";
 
 export const useActivities = (id?: string) => {
   const queryClient = useQueryClient();
   const location = useLocation();
 
   const { currentUser } = useAccount();
+  const {
+    activityStore: { filter, startDate },
+  } = useStore();
 
   const {
     data: activitiesGroup,
@@ -31,6 +35,8 @@ export const useActivities = (id?: string) => {
           params: {
             cursor: pageParam,
             pageSize: 3,
+            filter,
+            startDate,
           },
         },
       );
