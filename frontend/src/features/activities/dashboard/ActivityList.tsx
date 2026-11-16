@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Box, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
 
 import ActivityCard from "./ActivityCard";
 import { useActivities } from "../../../lib/hooks/useActivities";
 
-export default function ActivityList() {
+const ActivityList = observer(function ActivityList() {
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
@@ -38,4 +39,6 @@ export default function ActivityList() {
       ))}
     </Box>
   );
-}
+});
+
+export default ActivityList;

@@ -21,11 +21,14 @@ public class GetActivityList
         public async Task<Result<PagedList<ActivityDto, DateTime?>>> Handle(Query request, CancellationToken cancellationToken)
         {
             var query = context.Activities
+            .Where(x => x.Date >= request.Params.StartDate)
             .OrderBy(x => x.Date)
-            .Where(x => x.Date >= (request.Params.Cursor ?? request.Params.StartDate))
             .AsQueryable();
 
-
+            if (request.Params.Cursor.HasValue)
+            {
+                query = query.Where(x => x.Date >= request.Params.Cursor.Value);
+            }
 
             if (!string.IsNullOrEmpty(request.Params.Filter))
             {

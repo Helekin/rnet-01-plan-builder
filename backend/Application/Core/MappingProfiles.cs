@@ -1,5 +1,4 @@
 using AutoMapper;
-
 using Domain;
 using Application.Activities.DTOs;
 using Application.Profiles.DTOs;
@@ -12,6 +11,7 @@ public class MappingProfiles : Profile
     {
         string? currentUserId = null;
         CreateMap<Activity, Activity>();
+        CreateMap<Activity, UserActivityDto>();
         CreateMap<CreateActivityDto, Activity>();
         CreateMap<EditActivityDto, Activity>();
         CreateMap<Activity, ActivityDto>()
