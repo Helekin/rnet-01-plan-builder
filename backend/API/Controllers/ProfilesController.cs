@@ -3,7 +3,6 @@ using Domain;
 using Application.Profiles.Commands;
 using Application.Profiles.Queries;
 using Application.Profiles.DTOs;
-using System.Reflection.Metadata;
 
 namespace API.Controllers;
 
