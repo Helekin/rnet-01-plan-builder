@@ -14,6 +14,7 @@ using Application.Core;
 using Application.Interfaces;
 using Infrastructure.Security;
 using Infrastructure.Photos;
+using Infrastructure.Email;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 
@@ -48,6 +49,7 @@ builder.Services.Configure<ResendClientOptions>(opt =>
     opt.ApiToken = builder.Configuration["Resend:ApiToken"]!;
 });
 builder.Services.AddTransient<IResend, ResendClient>();
+builder.Services.AddTransient<IEmailSender<User>, EmailSender>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddAutoMapper(x => x.AddMaps(typeof(MappingProfiles).Assembly));
