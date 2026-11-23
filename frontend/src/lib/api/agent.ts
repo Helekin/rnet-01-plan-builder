@@ -34,14 +34,18 @@ agent.interceptors.response.use(
     await sleep(1000);
     store.uiStore.isIdle();
 
-    const status = error.response?.status;
+    const { status, data } = error.response;
 
     switch (status) {
       case 400:
         toast.error("Bad Request");
         break;
       case 401:
-        toast.error("Unauthorised");
+        if (data.detail === "Not Allowed") {
+          throw new Error(data);
+        } else {
+          toast.error("Unauthorised");
+        }
         break;
       case 404:
         router.navigate("/not-found");

@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 import { type LoginSchema } from "../schemas/loginSchema";
 import agent from "../api/agent";
 import { useStore } from "./useStore";
 import type { User } from "../types";
 import type { RegisterSchema } from "../schemas/registerSchema";
-import { toast } from "react-toastify";
 
 type LoginResponse = {
   accessToken: string;
@@ -62,8 +62,16 @@ export const useAccount = () => {
   });
 
   const resendConfirmationEmail = useMutation({
-    mutationFn: async (email: string) => {
-      await agent.get(`/account/resendConfirmEmail?email=${email}`);
+    mutationFn: async ({
+      email,
+      userId,
+    }: {
+      email?: string;
+      userId?: string | null;
+    }) => {
+      await agent.get(`/account/resendConfirmEmail`, {
+        params: { email, userId },
+      });
     },
     onSuccess: () => {
       toast.success("Email sent - please check your email");
