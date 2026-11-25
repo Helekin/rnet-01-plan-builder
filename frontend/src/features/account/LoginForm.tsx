@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +8,6 @@ import { LockOpen } from "@mui/icons-material";
 import TextInput from "../../app/shared/components/TextInput";
 import { loginSchema, type LoginSchema } from "../../lib/schemas/loginSchema";
 import { useAccount } from "../../lib/hooks/useAccount";
-import { useState } from "react";
 
 export default function LoginForm() {
   const [notVerified, setNotVerified] = useState(false);

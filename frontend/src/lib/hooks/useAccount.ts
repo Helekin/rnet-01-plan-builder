@@ -2,11 +2,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-import { type LoginSchema } from "../schemas/loginSchema";
 import agent from "../api/agent";
 import { useStore } from "./useStore";
 import type { User } from "../types";
+import { type LoginSchema } from "../schemas/loginSchema";
 import type { RegisterSchema } from "../schemas/registerSchema";
+import type { ChangePasswordSchema } from "../schemas/changePasswordSchema";
 
 type LoginResponse = {
   accessToken: string;
@@ -19,6 +20,15 @@ export const useAccount = () => {
   const queryClient = useQueryClient();
 
   const { userStore } = useStore();
+
+  const { data: currentUser, isLoading: loadingUserInfo } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await agent.get<User>("/account/user-info");
+      return response.data;
+    },
+    enabled: userStore.isLoggedIn,
+  });
 
   const loginUser = useMutation({
     mutationFn: async (creds: LoginSchema) => {
@@ -78,13 +88,10 @@ export const useAccount = () => {
     },
   });
 
-  const { data: currentUser, isLoading: loadingUserInfo } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await agent.get<User>("/account/user-info");
-      return response.data;
+  const changePassword = useMutation({
+    mutationFn: async (data: ChangePasswordSchema) => {
+      await agent.post("/account/change-password", data);
     },
-    enabled: userStore.isLoggedIn,
   });
 
   return {
@@ -95,5 +102,6 @@ export const useAccount = () => {
     registerUser,
     verifyEmail,
     resendConfirmationEmail,
+    changePassword,
   };
 };
