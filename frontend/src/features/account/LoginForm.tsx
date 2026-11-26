@@ -43,7 +43,7 @@ export default function LoginForm() {
         navigate(location.state?.from || "/activities");
       },
       onError: (error) => {
-        if (error.message === "NorAllowed") {
+        if (error.message === "NotAllowed") {
           setNotVerified(true);
         }
       },
@@ -112,17 +112,29 @@ export default function LoginForm() {
           </Button>
         </Box>
       ) : (
-        <Typography sx={{ textAlign: "center" }}>
-          Don't have an account?
-          <Typography
-            sx={{ ml: 2 }}
-            component={Link}
-            to="/register"
-            color="primary"
-          >
-            Sign up
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 3,
+          }}
+        >
+          <Typography>
+            Forgot password? Click <Link to="/forgot-password">here</Link>
           </Typography>
-        </Typography>
+          <Typography sx={{ textAlign: "center" }}>
+            Don't have an account?
+            <Typography
+              sx={{ ml: 2 }}
+              component={Link}
+              to="/register"
+              color="primary"
+            >
+              Sign up
+            </Typography>
+          </Typography>
+        </Box>
       )}
     </Paper>
   );

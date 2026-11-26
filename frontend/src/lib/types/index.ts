@@ -3,6 +3,12 @@ export type PagedList<T, TCursor> = {
   nextCursor: TCursor;
 };
 
+export type ResetPassword = {
+  email: string;
+  resetCode: string;
+  newPassword: string;
+};
+
 export type Activity = {
   id: string;
   title: string;

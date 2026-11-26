@@ -10,10 +10,11 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 type Props<TFormData extends FieldValues> = {
   title: string;
   icon: ReactNode;
-  onSubmit: (data: FieldValues) => void;
+  onSubmit: (data: TFormData) => Promise<void> | void;
   children: ReactNode;
   submitButtonText: string;
   resolver?: Resolver<TFormData>;
+  reset?: boolean;
 };
 
 export default function AccountFormWrapper<TFormData extends FieldValues>({
@@ -23,14 +24,20 @@ export default function AccountFormWrapper<TFormData extends FieldValues>({
   children,
   submitButtonText,
   resolver,
+  reset,
 }: Props<TFormData>) {
   const methods = useForm<TFormData>({ resolver, mode: "onTouched" });
+
+  const formSubmit = (data: TFormData) => {
+    onSubmit(data);
+    if (reset) methods.reset();
+  };
 
   return (
     <FormProvider {...methods}>
       <Paper
         component="form"
-        onSubmit={methods.handleSubmit(onSubmit)}
+        onSubmit={methods.handleSubmit(formSubmit)}
         sx={{
           display: "flex",
           flexDirection: "column",

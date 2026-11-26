@@ -1,6 +1,6 @@
 # Activities Platform
 
-A full-stack web platform for managing community activities. Users can register, browse events, create and host their own activities, join as attendees, comment in real time, and manage a public profile with photos and followers.
+A full-stack web platform for managing community activities. Users can register (with email confirmation), browse upcoming events with filters and infinite scroll, create and host their own activities, join as attendees, comment in real time, and manage a public profile with photos and followers.
 
 The project is split into two applications that live in the same repository:
 
@@ -11,6 +11,7 @@ The project is split into two applications that live in the same repository:
 
 ## Table of Contents
 
+- [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [How the Project Was Built](#how-the-project-was-built)
@@ -23,7 +24,19 @@ The project is split into two applications that live in the same repository:
 - [Database Setup (PostgreSQL on Linux)](#database-setup-postgresql-on-linux)
 - [Migrations and Database](#migrations-and-database)
 - [Important Notes](#important-notes)
+  - [Environment Variables and Secrets](#environment-variables-and-secrets)
+  - [Email in Development](#email-in-development)
+  - [Seed Data](#seed-data)
 - [Useful Commands](#useful-commands)
+
+## Features
+
+- **Accounts**: registration with email confirmation, login with bearer tokens, change password, and forgot/reset password by email.
+- **Activities**: create, edit, delete and cancel activities (only the host can manage an activity), with category, date, venue and a map.
+- **Attendance**: join or leave an activity; the host can cancel and reactivate it.
+- **Activity feed**: cursor-based pagination with infinite scroll, filtered by "I'm going", "I'm hosting" and a start date.
+- **Real-time comments**: a live chat on each activity, built with SignalR.
+- **Profiles**: bio, photo gallery (upload, crop, set main, delete) stored on Cloudinary, followers/following, and a user's past, upcoming and hosted events.
 
 ## Tech Stack
 
@@ -32,9 +45,10 @@ The project is split into two applications that live in the same repository:
 | Backend        | .NET 10, ASP.NET Core Web API, Entity Framework Core, ASP.NET Core Identity, MediatR, AutoMapper, FluentValidation, SignalR |
 | Database       | PostgreSQL (via Npgsql EF Core provider)                                                                       |
 | Media          | Cloudinary (photo uploads)                                                                                     |
+| Email          | Resend (confirmation and password reset emails)                                                                |
 | Frontend       | React 19, TypeScript, Vite, React Router, TanStack React Query, MobX, Axios                                    |
 | UI / Forms     | Material UI (MUI), MUI Date Pickers, React Hook Form, Zod, React Toastify                                      |
-| Extras         | Leaflet / React Leaflet (maps), LocationIQ (location autocomplete), Cropper.js (photo cropping), SignalR client |
+| Extras         | Leaflet / React Leaflet (maps), LocationIQ (location autocomplete), Cropper.js (photo cropping), React Calendar, React Intersection Observer (infinite scroll), SignalR client |
 | Tooling        | VS Code + C# Dev Kit, pnpm, ESLint, Insomnia                                                                   |
 
 ## Project Structure
@@ -47,17 +61,17 @@ rnet-01-plan-builder/
 │   ├── backend.slnx            # Solution file
 │   ├── API/                    # Entry point: controllers, middleware, SignalR hub, Program.cs
 │   │   ├── Controllers/        # Account, Activities, Profiles (+ BaseApiController)
-│   │   ├── DTOs/
+│   │   ├── DTOs/               # RegisterDto, ChangePasswordDto
 │   │   ├── Middleware/         # Global exception handling
 │   │   ├── SignalR/            # CommentHub (real-time comments)
 │   │   └── Properties/         # launchSettings.json (ports/profiles)
 │   ├── Application/            # Use cases (CQRS with MediatR)
 │   │   ├── Activities/         # Commands, Queries, DTOs, Validators
 │   │   ├── Profiles/           # Commands, Queries, DTOs, Validators
-│   │   ├── Core/               # Result, AppException, MappingProfiles, ValidationBehavior
+│   │   ├── Core/               # Result, AppException, MappingProfiles, ValidationBehavior, PagedList
 │   │   └── Interfaces/         # IPhotoService, IUserAccessor
 │   ├── Domain/                 # Entities: Activity, ActivityAttendee, Comment, Photo, User, UserFollowing
-│   ├── Infrastructure/         # External services: Cloudinary photos, security/authorization
+│   ├── Infrastructure/         # External services: Cloudinary photos, Resend email, security/authorization
 │   └── Persistence/            # AppDbContext, DbInitializer (seed data), EF Core migrations
 ├── database/                   # Local database folder (contents are git-ignored)
 ├── frontend/                   # React + TypeScript + Vite SPA
@@ -68,7 +82,7 @@ rnet-01-plan-builder/
 │   │   │   ├── router/         # Routes and RequireAuth guard
 │   │   │   └── shared/         # Reusable components (inputs, map, photo upload, buttons)
 │   │   ├── features/           # Pages grouped by feature
-│   │   │   ├── account/        # Login and register forms
+│   │   │   ├── account/        # Login, register, verify email, change/forgot/reset password
 │   │   │   ├── activities/     # Dashboard, details (incl. chat), create/edit form
 │   │   │   ├── profiles/       # Profile page, photos, about, edit form
 │   │   │   ├── home/
@@ -77,7 +91,7 @@ rnet-01-plan-builder/
 │   │   │   ├── api/            # Axios instance (agent) with interceptors
 │   │   │   ├── hooks/          # React Query hooks (activities, account, profile, comments)
 │   │   │   ├── schemas/        # Zod validation schemas
-│   │   │   ├── stores/         # MobX stores (UI, user)
+│   │   │   ├── stores/         # MobX stores (UI, user, activity filters)
 │   │   │   ├── types/
 │   │   │   └── util/
 │   │   └── main.tsx            # App entry point and providers
@@ -93,7 +107,7 @@ The backend follows a Clean Architecture approach, with each layer in its own pr
 - **API**: Web API controllers and application entry point. Exposes the REST endpoints, the Identity endpoints (`/api/login`, etc.) and the SignalR hub (`/comments`).
 - **Application**: Business logic and use cases, implemented as MediatR commands and queries, plus DTOs, validators and AutoMapper profiles. Coordinates the flow between the API and the domain.
 - **Domain**: Entities and core business rules. Independent from any external concern.
-- **Infrastructure**: Implementations of external services, such as Cloudinary photo storage, the current-user accessor and the `IsActivityHost` authorization handler.
+- **Infrastructure**: Implementations of external services, such as Cloudinary photo storage, the Resend email sender (`IEmailSender<User>`), the current-user accessor and the `IsActivityHost` authorization handler.
 - **Persistence**: Data access layer: `AppDbContext`, seed data and EF Core migrations.
 
 Project references:
@@ -163,8 +177,9 @@ dotnet add Domain package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add Persistence package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add Persistence package Microsoft.EntityFrameworkCore.Design
 
-# Infrastructure: photo uploads
+# Infrastructure: photo uploads and email
 dotnet add Infrastructure package CloudinaryDotNet
+dotnet add Infrastructure package Resend
 ```
 
 **e) Development milestones**
@@ -178,6 +193,9 @@ The backend was built up in stages, and the migration history reflects those sta
 5. **Photos**: Cloudinary integration in `Infrastructure` and profile photo endpoints (migration `PhotoEntityAdded`).
 6. **Comments**: real-time comments through the SignalR `CommentHub` (migration `CommentEntityAdded`).
 7. **Followers**: `UserFollowing` self-referencing relationship (migration `FollowerEntityAdded`).
+8. **Paging and filtering**: cursor-based pagination (`PaginationParams`, `PagedList`) and `isGoing` / `isHost` / start date filters for the activity list, with an index on the activity date (migration `DateIndexAdded`).
+9. **Email confirmation**: custom `register` and `resendConfirmEmail` endpoints, `RequireConfirmedEmail`, and a Resend-based `EmailSender`.
+10. **Password management**: `change-password` endpoint, plus Identity's `forgotPassword` / `resetPassword` with a reset email that links to the frontend.
 
 At startup the API applies any pending migrations automatically and seeds the database (`Program.cs`).
 
@@ -210,7 +228,7 @@ pnpm add mobx mobx-react-lite
 pnpm add react-hook-form zod @hookform/resolvers
 
 # Notifications, maps, calendar, photo upload/cropping, real-time
-pnpm add react-toastify leaflet react-leaflet@5.0.0-rc.2 react-calendar
+pnpm add react-toastify leaflet react-leaflet@5.0.0-rc.2 react-calendar react-intersection-observer
 pnpm add react-dropzone react-cropper cropperjs@1.6.2
 pnpm add @microsoft/signalr
 
@@ -220,9 +238,9 @@ pnpm add -D @types/leaflet @types/node
 
 **Architecture overview**
 
-- **Routing** (`app/router`): React Router with a `RequireAuth` guard around the protected routes (`/activities`, `/create-activity`, `/manage/:id`, `/profiles/:id`).
-- **Server state** (`lib/hooks`): React Query hooks wrap every API call made through the Axios `agent`.
-- **Client state** (`lib/stores`): MobX stores for UI loading state (`uiStore`) and the authenticated user (`userStore`).
+- **Routing** (`app/router`): React Router with a `RequireAuth` guard around the protected routes (`/activities`, `/create-activity`, `/manage/:id`, `/profiles/:id`, `/change-password`). The account pages (`/login`, `/register`, `/confirm-email`, `/forgot-password`, `/reset-password`) are public.
+- **Server state** (`lib/hooks`): React Query hooks wrap every API call made through the Axios `agent`. The activity list uses `useInfiniteQuery` with the backend's cursor.
+- **Client state** (`lib/stores`): MobX stores for UI loading state (`uiStore`), the access token (`userStore`) and the dashboard filters (`activityStore`).
 - **Forms** (`lib/schemas`): React Hook Form with Zod schemas.
 - **Real-time** (`useComments`): a SignalR connection to the backend's `/comments` hub.
 
@@ -239,7 +257,8 @@ pnpm add -D @types/leaflet @types/node
 1. Set up PostgreSQL (see [Database Setup](#database-setup-postgresql-on-linux)).
 2. Run the backend: see [backend/Readme.md](backend/Readme.md).
 3. Run the frontend: see [frontend/README.md](frontend/README.md).
-4. Open `http://localhost:5173`.
+4. Open `http://localhost:5173` and register a new account, or log in with a [seeded user](backend/Readme.md#seed-data).
+5. If you registered a new account, confirm it with the link from the confirmation email (or from the backend console in test mode, see [Email in Development](#email-in-development)).
 
 ## Database Setup (PostgreSQL on Linux)
 
@@ -368,12 +387,25 @@ dotnet ef migrations remove -p Persistence -s API
 
 ### Environment Variables and Secrets
 
-Manage sensitive configuration (connection strings, Cloudinary keys, API tokens) through:
+Manage sensitive configuration (connection strings, API keys and tokens) through:
 
-- **User Secrets** for local development: `dotnet user-secrets init -p API`.
+- **User Secrets** for local development (`dotnet user-secrets init -p API`): `ConnectionStrings:DefaultConnection` and `Resend:ApiToken`.
 - `backend/API/appsettings.json` (git-ignored) for the `CloudinarySettings` section.
-- `frontend/.env` for the frontend variables (`VITE_API_URL`, `VITE_COMMENTS_URL`, `VITE_LOCATION_IQ_TOKEN`).
+- `backend/API/appsettings.Development.json` (git-ignored) for `ClientAppUrl`, the frontend URL used in email links.
+- `frontend/.env` (git-ignored) for the frontend variables (`VITE_API_URL`, `VITE_COMMENTS_URL`, `VITE_LOCATION_IQ_TOKEN`).
 - Environment variables in production.
+
+See the [backend configuration reference](backend/Readme.md#configuration-reference) for every key.
+
+### Email in Development
+
+Logging in requires a confirmed email. By default, the backend sends the confirmation and password reset emails through **Resend**, which needs `Resend:ApiToken` and an allowed `From` address.
+
+For local testing you can skip Resend. In `backend/Infrastructure/Email/EmailSender.cs` (`SendMailAsync`), comment out `await resend.EmailSendAsync(message);` and uncomment `Console.WriteLine(message.HtmlBody);` and `await Task.CompletedTask;`. The email, with its link, is then printed in the backend console instead of being sent. See [backend/Readme.md](backend/Readme.md#testing-without-sending-emails) for details.
+
+### Seed Data
+
+On the first run, the backend creates three test users (`helekin@test.com`, `saggi@test.com`, `kefka@test.com`, password `Kthulhu@1928`) and sample activities. The seeded users are already email-confirmed, so you can log in with them directly (see [Seed Data](backend/Readme.md#seed-data)).
 
 ## Useful Commands
 

@@ -27,7 +27,7 @@ public class EmailSender(IServiceScopeFactory scopeFactory, IConfiguration confi
         var body = $@"
         <p>Hi {user.DisplayName}</p>
         <p>Please click this link to reset your password</p>
-        <p><a href='{config["ClientAppUrl"]}/reset-password?email={email}&code={resetCode}'>
+        <p><a href='{config["ClientAppUrl"]}/reset-password?email={Uri.EscapeDataString(email)}&code={resetCode}'>
             Click to reset your password</a>
         </p>
         <p>If you did not request this, you can ignore this email</p>
@@ -55,10 +55,10 @@ public class EmailSender(IServiceScopeFactory scopeFactory, IConfiguration confi
 
         message.To.Add(email);
 
-        Console.WriteLine(message.HtmlBody);
+        // Console.WriteLine(message.HtmlBody);
 
-        // await resend.EmailSendAsync(message);
+        await resend.EmailSendAsync(message);
 
-        await Task.CompletedTask;
+        // await Task.CompletedTask;
     }
 }

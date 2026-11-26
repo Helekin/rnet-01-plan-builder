@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 import agent from "../api/agent";
 import { useStore } from "./useStore";
-import type { User } from "../types";
+import type { ResetPassword, User } from "../types";
 import { type LoginSchema } from "../schemas/loginSchema";
 import type { RegisterSchema } from "../schemas/registerSchema";
 import type { ChangePasswordSchema } from "../schemas/changePasswordSchema";
@@ -94,6 +94,18 @@ export const useAccount = () => {
     },
   });
 
+  const forgotPassword = useMutation({
+    mutationFn: async (email: string) => {
+      await agent.post("/forgotPassword", { email });
+    },
+  });
+
+  const resetPassword = useMutation({
+    mutationFn: async (data: ResetPassword) => {
+      await agent.post("/resetPassword", data);
+    },
+  });
+
   return {
     loginUser,
     currentUser,
@@ -103,5 +115,7 @@ export const useAccount = () => {
     verifyEmail,
     resendConfirmationEmail,
     changePassword,
+    forgotPassword,
+    resetPassword,
   };
 };
